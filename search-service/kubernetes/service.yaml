@@ -1,0 +1,38 @@
+#
+# See https://kubernetes.io/docs/concepts/services-networking/ingress/
+#
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: search-ingress
+#   annotations:
+#     # use the shared ingress-nginx
+#     kubernetes.io/ingress.class: "nginx"
+# spec:
+#   rules:
+#     - http:
+#         paths:
+#           - backend:
+#               service:
+#                 name: search-service
+#                 port:
+#                   number: 8081
+#             path: /
+#             pathType: Prefix
+
+# Your ingress rules here
+#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: search-service-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: search-service

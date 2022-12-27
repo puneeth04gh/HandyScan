@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap 
+metadata:
+  name: backend-service-configmap 
+data:
+  # Configuration values can be set as key-value properties
+  endpoint: http://backend-service-service:8080/backend-service
+  database_uri: mongodb://localhost:27017
+  minio_endpoint: "http://minio:9000"
+  mongodb_database: "handyscan"
+  ocr_topicname: "ocr_topic"
+  processing_bucket: "ocr-bucket"
+  kafka_bootstrap_servers: "pkc-4r087.us-west2.gcp.confluent.cloud:9092"
+  kafka_security_protocol: "SASL_SSL"
+  kafka_sasl_mechanism: "PLAIN"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+data:
+  password: cm9vdHBhc3MxMjM=
+  username: cm9vdHVzZXI=
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+data:
+  password: aGFuZHlzY2FuX2FkbWlu
+  username: aGFuZHlzY2FuX2FkbWlu
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-secret
+data:
+  jaas_conf: b3JnLmFwYWNoZS5rYWZrYS5jb21tb24uc2VjdXJpdHkucGxhaW4uUGxhaW5Mb2dpbk1vZHVsZSByZXF1aXJlZCB1c2VybmFtZT0nRzM1N1YzTVJENldMNEdFSScgcGFzc3dvcmQ9J29EZHlMSVhoVlpsQm1jMEVqSlJMK1BvKzN3OFhKczBNUEdGV2taZ3RIQm1SaTdyL3ZEQWMrN3crdGNXb3ZOQ08nOw==

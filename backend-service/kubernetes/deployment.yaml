@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-service
+  template:
+    metadata:
+      labels:
+        app: backend-service
+    spec:
+      containers:
+        - name: backend-service
+          image: gagankshetty/backend-service:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          # resources:
+          #   limits:
+          #     memory: "1024Mi"
+          #     cpu: "1000m"
+          env:
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: minio_endpoint
+            - name: MINIO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: username
+                  optional: false
+            - name: MINIO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: password
+                  optional: false
+            - name: OCR_TOPIC_NAME
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: ocr_topicname
+            - name: PROCESSING_BUCKET
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: processing_bucket
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: mongodb_database
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: username
+                  optional: false
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: password
+                  optional: false
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: kafka_bootstrap_servers
+            - name: KAFKA_SECURITY_PROTOCOL
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: kafka_security_protocol
+            - name: KAFKA_SASL_MECHANISM
+              valueFrom:
+                configMapKeyRef: 
+                  name: backend-service-configmap 
+                  key: kafka_sasl_mechanism
+            - name: KAFKA_JAAS_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-secret
+                  key: jaas_conf
+                  optional: false
